@@ -42,9 +42,6 @@
                             "subnet": {
                                 "id": "[parameters('sqlSubnetRef')]"
                             },
-                            "publicIpAddress": {
-                                "id": "[resourceId(resourceGroup().Name,'Microsoft.Network/publicIpAddresses', parameters('sql1AddressNameWithSuffix'))]"
-                            },
                             "loadBalancerBackendAddressPools": [
                                 {
                                     "id": "[parameters('sqlBEAddressPoolID')]"
@@ -73,9 +70,6 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[parameters('sqlSubnetRef')]"
-                            },
-                            "publicIpAddress": {
-                                "id": "[resourceId(resourceGroup().Name,'Microsoft.Network/publicIpAddresses', parameters('sql0AddressNameWithSuffix'))]"
                             },
                             "loadBalancerBackendAddressPools": [
                                 {
