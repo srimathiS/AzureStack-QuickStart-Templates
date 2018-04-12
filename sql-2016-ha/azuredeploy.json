@@ -488,8 +488,7 @@
             "properties": {
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
-                    "domainNameLabel": "[variables('dnsPrefix')]",
-                    "reverseFqdn": "[concat(variables('dnsPrefix'), '.', resourceGroup().location, '.cloudapp.', parameters('dnsSuffix'))]"
+                    "domainNameLabel": "[variables('dnsPrefix')]"
                 }
             }
         },
