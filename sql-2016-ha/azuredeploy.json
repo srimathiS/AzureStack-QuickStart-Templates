@@ -444,20 +444,8 @@
                     "SqlStorageAccountType": {
                         "value": "[parameters('sqlStorageAccountType')]"
                     },
-                    "DcStorageAccountType": {
-                        "value": "[variables('dcStorageAccountType')]"
-                    },
                     "primaryDCIPAddressNameWithSuffix": {
                         "value": "[variables('primaryDCIPAddressNameWithSuffix')]"
-                    },
-                    "sqlVMName": {
-                        "value": "[variables('vmSettings').sqlVMName]"
-                    },
-                    "sql1AddressNameWithSuffix": {
-                        "value": "[variables('sql1AddressNameWithSuffix')]"
-                    },
-                    "sql0AddressNameWithSuffix": {
-                        "value": "[variables('sql0AddressNameWithSuffix')]"
                     },
                     "virtualNetworkName": {
                         "value": "[variables('virtualNetworkNameWithSuffix')]"
@@ -470,9 +458,6 @@
                     },
                     "nsgID": {
                         "value": "[variables('nsgID')]"
-                    },
-                    "dnsSuffix": {
-                        "value": "[parameters('dnsSuffix')]"
                     }
                 }
             }
@@ -709,12 +694,6 @@
                     },
                     "sqlwNicName": {
                         "value": "[variables('sqlwNicName')]"
-                    },
-                    "sql1AddressNameWithSuffix": {
-                        "value": "[variables('sql1AddressNameWithSuffix')]"
-                    },
-                    "sql0AddressNameWithSuffix": {
-                        "value": "[variables('sql0AddressNameWithSuffix')]"
                     }
                 }
             }
