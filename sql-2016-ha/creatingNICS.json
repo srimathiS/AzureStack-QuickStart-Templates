@@ -19,12 +19,6 @@
         },
         "sqlwNicName": {
             "type": "string"
-        },
-        "sql1AddressNameWithSuffix": {
-            "type": "string"
-        },
-        "sql0AddressNameWithSuffix": {
-            "type": "string"
         }
     },
     "resources": [
