@@ -181,6 +181,7 @@ function Set-TargetResource
                                             EndPoint_URL = 'TCP://$EndpointName', `
                                             Availability_Mode = Synchronous_Commit, `
                                             Failover_Mode = Automatic, `
+                                            SEEDING_MODE = AUTOMATIC, `
                                             Secondary_Role(Allow_connections = ALL) `
                                          ) "
 
@@ -188,7 +189,8 @@ function Set-TargetResource
         osql -S $primaryReplica -U $sa -P $saPassword -Q $query
 
         # Add this node to HAG 
-	    osql -S $InstanceName -U $sa -P $saPassword -Q "ALTER AVAILABILITY GROUP $Name JOIN"
+        osql -S $InstanceName -U $sa -P $saPassword -Q "ALTER AVAILABILITY GROUP $Name JOIN"
+        osql -S $InstanceName -U $sa -P $saPassword -Q "ALTER AVAILABILITY GROUP $Name GRANT CREATE ANY DATABASE"
 
         # restore database
         foreach($db in $Database)
@@ -230,7 +232,8 @@ function Set-TargetResource
                                     ( `
                                         ENDPOINT_URL = 'TCP://$EndpointName', `
                                         Availability_Mode = Synchronous_Commit, `
-                                        Failover_Mode = Automatic `
+                                        Failover_Mode = Automatic, `
+                                        SEEDING_MODE = AUTOMATIC `
                                      )"
 
 	    Write-Verbose -Message "Create HAG : $query.."
