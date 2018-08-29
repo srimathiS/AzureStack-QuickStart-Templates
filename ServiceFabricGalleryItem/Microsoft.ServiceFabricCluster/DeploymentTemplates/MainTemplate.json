@@ -229,7 +229,7 @@
         "imageConfig": {
             "vmssUniqueName": "[concat(parameters('nodeTypePrefix'), 'vmss')]",
             "vmImagePublisher": "MicrosoftAzureStack",
-            "vmImageOffer": "AddonRP",
+            "vmImageOffer": "AddOnRP",
 			"vmImageSku": "Core32",
             "vmImageVersion": "latest",
             "vhdContainerName": "[concat(variables('uniquePrefix'), 'vhd')]",
