@@ -115,24 +115,11 @@
                 "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
             }
         },
-        "certificateThumbprint": {
-            "type": "string",
-            "metadata": {
-                "description": "Certificate Thumbprint"
-            }
-        },
         "reverseProxyCertificateUrlValue": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
                 "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
-            }
-        },
-        "reverseProxyCertificateThumbprint": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Reverse proxy Certificate Thumbprint"
             }
         },
         "adminClientCertificateThumbprints": {
@@ -246,12 +233,7 @@
         "vmssDeploymentTemplateURL": "[uri(parameters('scriptBaseUrl'), 'vmssProvision.json')]",
 
         "scriptName": "PrepareServiceFabricDeployment.ps1",
-        "serviceFabricPrepareScriptUrl": "[uri(parameters('scriptBaseUrl'), variables('scriptName'))]",
-
-        "clusterCertThumbprintParam": "[concat(' -CertificateThumbprint ', parameters('certificateThumbprint') )]",
-        "reverseProxyCertThumbprintParam": "[concat(' -ReverseProxyCertificateThumbprint ', parameters('reverseProxyCertificateThumbprint') )]",
-        "commandParam0": "[variables('clusterCertThumbprintParam')]",
-        "commandParam": "[if(equals(trim(parameters('reverseProxyCertificateThumbprint')), ''), variables('commandParam0'), concat(variables('commandParam0'), variables('reverseProxyCertThumbprintParam')))]",
+        "serviceFabricPrepareScriptUrl": "[uri(parameters('scriptBaseUrl'), variables('scriptName'))]",        
 
         "isReverseProxyCert": "[if(equals(trim(parameters('reverseProxyCertificateUrlValue')), ''), bool('false'), bool('true'))]",
         "isSameCert": "[if(equals(parameters('clusterCertificateUrlValue'), parameters('reverseProxyCertificateUrlValue')), bool('true'), bool('false'))]",
@@ -464,14 +446,8 @@
                     "certificateStoreValue": {
                         "value": "[variables('certificateStoreValue')]"
                     },
-                    "certificateThumbprint": {
-                        "value": "[parameters('certificateThumbprint')]"
-                    },
                     "reverseProxyCertificateUrlValue": {
                         "value": "[parameters('reverseProxyCertificateUrlValue')]"
-                    },
-                    "reverseProxyCertificateThumbprint": {
-                        "value": "[parameters('reverseProxyCertificateThumbprint')]"
                     },
                     "servicefabricTcpGatewayPort": {
                         "value": "[parameters('servicefabricTcpGatewayPort')]"
@@ -624,14 +600,8 @@
                     "certificateStoreValue": {
                         "value": "[variables('certificateStoreValue')]"
                     },
-                    "certificateThumbprint": {
-                        "value": "[parameters('certificateThumbprint')]"
-                    },
                     "reverseProxyCertificateUrlValue": {
                         "value": "[parameters('reverseProxyCertificateUrlValue')]"
-                    },
-                    "reverseProxyCertificateThumbprint": {
-                        "value": "[parameters('reverseProxyCertificateThumbprint')]"
                     },
                     "servicefabricTcpGatewayPort": {
                         "value": "[parameters('servicefabricTcpGatewayPort')]"

@@ -68,12 +68,6 @@
     [Parameter(Mandatory = $true)]
     [string] $certificateStoreValue,
 
-    [Parameter(Mandatory = $true)]
-    [string] $certificateThumbprint,
-
-    [Parameter(Mandatory = $false)]
-    [string] $reverseProxyCertificateThumbprint = "",
-
     [Parameter(Mandatory = $false)]
     [string] $DNSService = "No",
 
@@ -117,8 +111,6 @@
             DiagStoreAccountBlobUri = $DiagStoreAccountBlobUri
             DiagStoreAccountTableUri = $DiagStoreAccountTableUri
             CertificateStoreValue = $certificateStoreValue
-            CertificateThumbprint = $certificateThumbprint
-            ReverseProxyCertificateThumbprint = $reverseProxyCertificateThumbprint
             AdminClientCertificateThumbprint = $adminClientCertificateThumbprint
             NonAdminClientCertificateThumbprint = $nonAdminClientCertificateThumbprint
             ClientConnectionEndpoint = $ClientConnectionEndpoint

@@ -130,22 +130,10 @@
                 "description": "The store name where the cert will be deployed in the virtual machine"
             }
         },
-        "certificateThumbprint": {
-            "type": "string",
-            "metadata": {
-                "description": "Certificate Thumbprint"
-            }
-        },
         "reverseProxyCertificateUrlValue": {
             "type": "string",
             "metadata": {
                 "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
-            }
-        },
-        "reverseProxyCertificateThumbprint": {
-            "type": "string",
-            "metadata": {
-                "description": "Reverse proxy Certificate Thumbprint"
             }
         },
         "servicefabricTcpGatewayPort": {
@@ -246,12 +234,7 @@
 
         "scriptName": "PrepareServiceFabricDeployment.ps1",
         "serviceFabricPrepareScriptUrl": "[uri(parameters('scriptBaseUrl'), variables('scriptName'))]",
-        "clusterCertThumbprintParam": "[concat(' -CertificateThumbprint ', parameters('certificateThumbprint') )]",
         "networkParam" : "[concat(concat(' -SubnetIPFormat ', parameters('subnetIPFormat') ), concat(' -NodeTypeCount ', length(parameters('nodeTypeInstanceCounts')) ))]",
-        "reverseProxyCertThumbprintParam": "[concat(' -ReverseProxyCertificateThumbprint ', parameters('reverseProxyCertificateThumbprint') )]",
-        "commandParam0": "[concat(variables('clusterCertThumbprintParam'), variables('networkParam'))]",
-        "commandParam": "[if(equals(trim(parameters('reverseProxyCertificateThumbprint')), ''), variables('commandParam0'), concat(variables('commandParam0'), variables('reverseProxyCertThumbprintParam')))]",
-
         "serviceFabricDeploymentModuleUrl": "[uri(parameters('scriptBaseUrl'), 'DeploySFCluster.zip')]",
         "serviceFabricDeploymentConfigFunction": "DeploySFCluster.ps1\\InstallServiceFabricConfiguration",
         "serviceFabricConfigPath": "[uri(parameters('scriptBaseUrl'), 'ClusterConfig.X509.MultiMachine.json')]",
@@ -268,7 +251,7 @@
                         "fileUris": [
                             "[variables('serviceFabricPrepareScriptUrl')]"
                         ],
-                        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('scriptName'), variables('commandParam'))]"
+                        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('scriptName'), variables('networkParam'))]"
                     },
                     "typeHandlerVersion": "1.8",
                     "autoUpgradeMinorVersion": true,
@@ -286,7 +269,7 @@
                         "fileUris": [
                             "[variables('serviceFabricPrepareScriptUrl')]"
                         ],
-                        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('scriptName'), variables('commandParam'))]"
+                        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('scriptName'), variables('networkParam'))]"
                     },
                     "typeHandlerVersion": "1.8",
                     "autoUpgradeMinorVersion": true,
@@ -318,8 +301,6 @@
                             "applicationStartPort": "[parameters('applicationStartPort')]",
                             "applicationEndPort": "[parameters('applicationEndPort')]",
                             "certificateStoreValue": "[parameters('certificateStoreValue')]",
-                            "certificateThumbprint": "[parameters('certificateThumbprint')]",
-                            "reverseProxyCertificateThumbprint": "[parameters('reverseProxyCertificateThumbprint')]",
                             "adminClientCertificateThumbprint": "[parameters('adminClientCertificateThumbprint')]",
                             "nonAdminClientCertificateThumbprint": "[parameters('nonAdminClientCertificateThumbprint')]",
                             "ClientConnectionEndpoint": "[parameters('adminClientConnectionEndpoint')]",

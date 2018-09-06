@@ -1,12 +1,5 @@
 ﻿param
 (
-
-        [Parameter(Mandatory=$true)]
-        [string] $CertificateThumbprint,
-
-        [Parameter(Mandatory=$false)]
-        [string] $ReverseProxyCertificateThumbprint="",
-
         [parameter(Mandatory = $true)]
         [string] $SubnetIPFormat,
 
@@ -43,15 +36,19 @@ function Grant-CertAccess
     (
     [Parameter(Position=1, Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
-    [string]$pfxThumbPrint,
+    [string]$subjectName,
 
     [Parameter(Position=2, Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]$serviceAccount
     )
 
-    $cert = Get-ChildItem -Path cert:\LocalMachine\My | Where-Object -FilterScript { $PSItem.ThumbPrint -eq $pfxThumbPrint; }
-
+    $cert = Get-ChildItem -Path cert:\LocalMachine\My | Where-Object -FilterScript { $PSItem.SubjectName.Name -eq $subjectName; }
+    if ($cert.Count -ne 1)
+    {
+        Write-Error -Exception "$($cert.Count) certificate(s) with $subjectName found. Expecting only one"
+        throw
+    }
     # Specify the user, the permissions, and the permission type
     $permission = "$($serviceAccount)","FullControl","Allow"
     $accessRule = New-Object -TypeName System.Security.AccessControl.FileSystemAccessRule -ArgumentList $permission
@@ -74,12 +71,17 @@ function Grant-CertAccess
     get-acl $keyFullPath| fl
 }
 
+$subjectNames = @{"ClusterCert"= "CN=SFClusterCertificate";
+"ReverseProxyCert" = "CN=SFReverseProxyCertificate" }
 # Grant Network Service access to certificates as per the documentation at: 
 # https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-windows-cluster-x509-security#install-the-certificates
 
-Grant-CertAccess -pfxThumbPrint $CertificateThumbprint -serviceAccount "Network Service"
-
-if($ReverseProxyCertificateThumbprint)
-{
-    Grant-CertAccess -pfxThumbPrint $ReverseProxyCertificateThumbprint -serviceAccount "Network Service"
+Write-Verbose "Granting Network access to SF Cluster Certificate" -Verbose
+Grant-CertAccess -subjectName $subjectNames.ClusterCert -serviceAccount "Network Service"
+try {
+    Write-Verbose "Granting Network access to SF ReverseProxy Certificate" -Verbose
+    Grant-CertAccess -subjectName $subjectNames.ReverseProxyCert -serviceAccount "Network Service"
+}
+catch {
+    Write-Verbose $_
 }
