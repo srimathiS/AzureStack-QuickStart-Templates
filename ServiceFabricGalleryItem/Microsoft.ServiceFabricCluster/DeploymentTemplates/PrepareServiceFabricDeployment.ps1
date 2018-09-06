@@ -72,12 +72,15 @@ function Grant-CertAccess
 }
 
 $subjectNames = @{"ClusterCert"= "CN=SFClusterCertificate";
+"ServerCert"= "CN=SFServerCertificate";
 "ReverseProxyCert" = "CN=SFReverseProxyCertificate" }
 # Grant Network Service access to certificates as per the documentation at: 
 # https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-windows-cluster-x509-security#install-the-certificates
 
 Write-Verbose "Granting Network access to SF Cluster Certificate" -Verbose
 Grant-CertAccess -subjectName $subjectNames.ClusterCert -serviceAccount "Network Service"
+Write-Verbose "Granting Network access to SF Server Certificate" -Verbose
+Grant-CertAccess -subjectName $subjectNames.ServerCert -serviceAccount "Network Service"
 try {
     Write-Verbose "Granting Network access to SF ReverseProxy Certificate" -Verbose
     Grant-CertAccess -subjectName $subjectNames.ReverseProxyCert -serviceAccount "Network Service"

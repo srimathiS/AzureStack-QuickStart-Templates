@@ -74,12 +74,6 @@
     [Parameter(Mandatory = $false)]
     [string] $RepairManager = "No",
 
-    [Parameter(Mandatory = $false)]
-    [string[]] $adminClientCertificateThumbprint = @(),
-
-    [Parameter(Mandatory = $false)]
-    [string[]] $nonAdminClientCertificateThumbprint = @(),
-
     [Parameter(Mandatory = $true)]
     [string] $ClientConnectionEndpoint
     )
@@ -111,8 +105,6 @@
             DiagStoreAccountBlobUri = $DiagStoreAccountBlobUri
             DiagStoreAccountTableUri = $DiagStoreAccountTableUri
             CertificateStoreValue = $certificateStoreValue
-            AdminClientCertificateThumbprint = $adminClientCertificateThumbprint
-            NonAdminClientCertificateThumbprint = $nonAdminClientCertificateThumbprint
             ClientConnectionEndpoint = $ClientConnectionEndpoint
             PsDscRunAsCredential = $Credential
             DNSService = $DNSService

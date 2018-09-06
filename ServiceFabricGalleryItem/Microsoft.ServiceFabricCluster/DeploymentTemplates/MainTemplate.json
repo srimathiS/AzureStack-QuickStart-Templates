@@ -114,6 +114,12 @@
             "metadata": {
                 "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
             }
+        },        
+        "serverCertificateUrlValue": {
+            "type": "string",
+            "metadata": {
+                "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
+            }
         },
         "reverseProxyCertificateUrlValue": {
             "type": "string",
@@ -122,18 +128,18 @@
                 "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
             }
         },
-        "adminClientCertificateThumbprints": {
+        "adminClientCertificateUrlValue": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
-                "description": "Admin client Certificate Thumbprints"
+                "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
             }
         },
-        "nonAdminClientCertificateThumbprints": {
+        "nonAdminClientCertificateUrlValue": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
-                "description": "Non-Admin client Certificate Thumbprint"
+                "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
             }
         },
         "DNSService": {
@@ -211,7 +217,7 @@
         "lbPortsArray": "[concat(array(parameters('servicefabricTcpGatewayPort')), array(parameters('servicefabricHttpGatewayPort')), parameters('lbApplicationPorts'))]",
         "nsgPortsArray": "[concat(variables('lbPortsArray'), parameters('nsgPorts'))]",
         "nodeTypeInstanceCounts": "[concat(array(parameters('primaryNtInstanceCount')), parameters('additionalNodeTypeInstaceCounts'))]",
-        "certificateStoreValue": "My",
+        
 
         "imageConfig": {
             "vmssUniqueName": "[concat(parameters('nodeTypePrefix'), 'vmss')]",
@@ -236,12 +242,9 @@
         "serviceFabricPrepareScriptUrl": "[uri(parameters('scriptBaseUrl'), variables('scriptName'))]",        
 
         "isReverseProxyCert": "[if(equals(trim(parameters('reverseProxyCertificateUrlValue')), ''), bool('false'), bool('true'))]",
-        "isSameCert": "[if(equals(parameters('clusterCertificateUrlValue'), parameters('reverseProxyCertificateUrlValue')), bool('true'), bool('false'))]",
-        "certsToInstall": "[if(or(not(variables('isReverseProxyCert')), variables('isSameCert')), array(parameters('clusterCertificateUrlValue')), concat(array(parameters('clusterCertificateUrlValue')), array(parameters('reverseProxyCertificateUrlValue'))))]",
+        "certurls": "[concat(array(parameters('clusterCertificateUrlValue')),array(parameters('serverCertificateUrlValue')),array(parameters('adminClientCertificateUrlValue')),array(parameters('nonAdminClientCertificateUrlValue')))]",
+        "certsToInstall": "[if(not(variables('isReverseProxyCert')), variables('certurls'), concat(variables('certurls'), array(parameters('reverseProxyCertificateUrlValue'))))]"
 
-        "delimiters": [ ",", ";" ],
-        "adminClientCertificateThumbprint": "[split(trim(parameters('adminClientCertificateThumbprints')), variables('delimiters'))]",
-        "nonAdminClientCertificateThumbprint": "[split(trim(parameters('nonAdminClientCertificateThumbprints')), variables('delimiters'))]"
     },
     "resources": [
         {
@@ -440,14 +443,8 @@
                     "sourceVaultValue": {
                         "value": "[parameters('sourceVaultValue')]"
                     },
-                    "clusterCertificateUrlValue": {
-                        "value": "[parameters('clusterCertificateUrlValue')]"
-                    },
-                    "certificateStoreValue": {
-                        "value": "[variables('certificateStoreValue')]"
-                    },
-                    "reverseProxyCertificateUrlValue": {
-                        "value": "[parameters('reverseProxyCertificateUrlValue')]"
+                    "certsToInstall": {
+                        "value": "[variables('certsToInstall')]"
                     },
                     "servicefabricTcpGatewayPort": {
                         "value": "[parameters('servicefabricTcpGatewayPort')]"
@@ -470,14 +467,8 @@
                     "applicationEndPort": {
                         "value": "[variables('applicationEndPort')]"
                     },
-                    "adminClientCertificateThumbprint": {
-                        "value": "[variables('adminClientCertificateThumbprint')]"
-                    },
                     "adminClientConnectionEndpoint": {
                         "value": "[concat(reference(concat('Microsoft.Network/publicIPAddresses/', concat(concat(variables('imageConfig').vmssUniqueName, '0'), 'pip')), variables('apiVersion').publicIPApiVersion).dnsSettings.fqdn, ':', parameters('servicefabricTcpGatewayPort'))]"
-                    },
-                    "nonAdminClientCertificateThumbprint": {
-                        "value": "[variables('nonAdminClientCertificateThumbprint')]"
                     },
                     "DNSService": {
                         "value": "[parameters('DNSService')]"
@@ -594,14 +585,8 @@
                     "sourceVaultValue": {
                         "value": "[parameters('sourceVaultValue')]"
                     },
-                    "clusterCertificateUrlValue": {
-                        "value": "[parameters('clusterCertificateUrlValue')]"
-                    },
-                    "certificateStoreValue": {
-                        "value": "[variables('certificateStoreValue')]"
-                    },
-                    "reverseProxyCertificateUrlValue": {
-                        "value": "[parameters('reverseProxyCertificateUrlValue')]"
+                    "certsToInstall": {
+                        "value": "[variables('certsToInstall')]"
                     },
                     "servicefabricTcpGatewayPort": {
                         "value": "[parameters('servicefabricTcpGatewayPort')]"
@@ -624,14 +609,8 @@
                     "applicationEndPort": {
                         "value": "[variables('applicationEndPort')]"
                     },
-                    "adminClientCertificateThumbprint": {
-                        "value": "[variables('adminClientCertificateThumbprint')]"
-                    },
                     "adminClientConnectionEndpoint": {
                         "value": "[concat(reference(concat('Microsoft.Network/publicIPAddresses/', concat(concat(variables('imageConfig').vmssUniqueName, '0'), 'pip')), variables('apiVersion').publicIPApiVersion).dnsSettings.fqdn, ':', parameters('servicefabricTcpGatewayPort'))]"
-                    },
-                    "nonAdminClientCertificateThumbprint": {
-                        "value": "[variables('nonAdminClientCertificateThumbprint')]"
                     },
                     "DNSService": {
                         "value": "[parameters('DNSService')]"

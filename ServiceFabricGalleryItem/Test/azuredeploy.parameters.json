@@ -34,20 +34,17 @@
     },
     "clusterCertificateUrlValue": {
       "value": ""
-    },
-    "certificateThumbprint": {
-      "value": "0984053b9639215d278a0e4b4ab1120e75057463"
+    },    
+    "ServerCertificateUrlValue": {
+      "value": ""
     },
     "reverseProxyCertificateUrlValue": {
       "value": ""
     },
-    "reverseProxyCertificateThumbprint": {
+    "adminClientCertificateUrlValue": {
       "value": ""
     },
-    "adminClientCertificateThumbprints": {
-      "value": "0272251171BA32CEC7938A65B8A6A553AA2D3283"
-    },
-    "nonAdminClientCertificateThumbprints": {
+    "nonAdminClientCertificateUrlValue": {
       "value": ""
     },
     "DNSService": {

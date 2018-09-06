@@ -113,27 +113,12 @@
             "metadata": {
                 "description": "Resource Id of the key vault, is should be in the format of /subscriptions/<Sub ID>/resourceGroups/<Resource group name>/providers/Microsoft.KeyVault/vaults/<vault name>"
             }
-        },
-        "clusterCertificateUrlValue": {
-            "type": "string",
+        },        
+        "certsToInstall": {
+            "type": "array",
+            "defaultValue": [ ],
             "metadata": {
-                "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
-            }
-        },
-        "certificateStoreValue": {
-            "type": "string",
-            "allowedValues": [
-                "My"
-            ],
-            "defaultValue": "My",
-            "metadata": {
-                "description": "The store name where the cert will be deployed in the virtual machine"
-            }
-        },
-        "reverseProxyCertificateUrlValue": {
-            "type": "string",
-            "metadata": {
-                "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
+                "description": "Certificate urls to install from"
             }
         },
         "servicefabricTcpGatewayPort": {
@@ -159,20 +144,6 @@
         },
         "adminClientConnectionEndpoint": {
             "type": "string"
-        },
-        "adminClientCertificateThumbprint": {
-            "type": "array",
-            "defaultValue": [ ],
-            "metadata": {
-                "description": "Admin client Certificate Thumbprint"
-            }
-        },
-        "nonAdminClientCertificateThumbprint": {
-            "type": "array",
-            "defaultValue": [ ],
-            "metadata": {
-                "description": "Non-Admin client Certificate Thumbprint"
-            }
         },
         "DNSService": {
             "type": "string"
@@ -227,11 +198,6 @@
             "lbNatPoolID": "[concat(variables('lbID'),'/inboundNatPools/', variables('natPoolName'))]",
             "lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/', variables('bePoolName'))]"
         },
-
-        "isReverseProxyCert": "[if(equals(trim(parameters('reverseProxyCertificateUrlValue')), ''), bool('false'), bool('true'))]",
-        "isSameCert": "[if(equals(parameters('clusterCertificateUrlValue'), parameters('reverseProxyCertificateUrlValue')), bool('true'), bool('false'))]",
-        "certsToInstall": "[if(or(not(variables('isReverseProxyCert')), variables('isSameCert')), array(parameters('clusterCertificateUrlValue')), concat(array(parameters('clusterCertificateUrlValue')), array(parameters('reverseProxyCertificateUrlValue'))))]",
-
         "scriptName": "PrepareServiceFabricDeployment.ps1",
         "serviceFabricPrepareScriptUrl": "[uri(parameters('scriptBaseUrl'), variables('scriptName'))]",
         "networkParam" : "[concat(concat(' -SubnetIPFormat ', parameters('subnetIPFormat') ), concat(' -NodeTypeCount ', length(parameters('nodeTypeInstanceCounts')) ))]",
@@ -239,7 +205,7 @@
         "serviceFabricDeploymentConfigFunction": "DeploySFCluster.ps1\\InstallServiceFabricConfiguration",
         "serviceFabricConfigPath": "[uri(parameters('scriptBaseUrl'), 'ClusterConfig.X509.MultiMachine.json')]",
         "serviceFabricRuntimeUrl": "[if(equals(trim(parameters('serviceFabricRuntimeUrl')), ''), 'N/A', parameters('serviceFabricRuntimeUrl'))]",
-
+        "certificateStoreValue": "My",
         "deploymentNodeIndex": 0,
 
         "vmssExtensions0": [ 
@@ -300,9 +266,7 @@
                             "ephemeralEndPort": "[parameters('ephemeralEndPort')]",
                             "applicationStartPort": "[parameters('applicationStartPort')]",
                             "applicationEndPort": "[parameters('applicationEndPort')]",
-                            "certificateStoreValue": "[parameters('certificateStoreValue')]",
-                            "adminClientCertificateThumbprint": "[parameters('adminClientCertificateThumbprint')]",
-                            "nonAdminClientCertificateThumbprint": "[parameters('nonAdminClientCertificateThumbprint')]",
+                            "certificateStoreValue": "[variables('certificateStoreValue')]",
                             "ClientConnectionEndpoint": "[parameters('adminClientConnectionEndpoint')]",
                             "DNSService": "[parameters('DNSService')]",
                             "RepairManager": "[parameters('RepairManager')]",
@@ -478,10 +442,10 @@
                                 "copy": [
                                     {
                                         "name": "vaultCertificates",
-                                        "count": "[length(variables('certsToInstall'))]",
+                                        "count": "[length(parameters('certsToInstall'))]",
                                         "input": {
-                                            "certificateStore": "[parameters('certificateStoreValue')]",
-                                            "certificateUrl": "[variables('certsToInstall')[copyIndex('vaultCertificates')]]"
+                                            "certificateStore": "[variables('certificateStoreValue')]",
+                                            "certificateUrl": "[parameters('certsToInstall')[copyIndex('vaultCertificates')]]"
                                         }
                                     }
                                 ]
