@@ -19,9 +19,9 @@
         "primaryNtInstanceCount": {
             "type": "int",
             "metadata": {
-                "description": "Size of the VM scale set (Min 5 and Max 100)."
+                "description": "Size of the VM scale set (Min 3 and Max 100)."
             },
-            "defaultValue": 5,
+            "defaultValue": 3,
             "minValue": 3,
             "maxValue": 100
         },

@@ -71,8 +71,8 @@ function Grant-CertAccess
     get-acl $keyFullPath| fl
 }
 
-$subjectNames = @{"ClusterCert"= "CN=SFClusterCertificate";
-"ServerCert"= "CN=SFServerCertificate";
+$subjectNames = @{"ClusterCert" = "CN=SFClusterCertificate";
+"ServerCert" = "CN=SFServerCertificate";
 "ReverseProxyCert" = "CN=SFReverseProxyCertificate" }
 # Grant Network Service access to certificates as per the documentation at: 
 # https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-windows-cluster-x509-security#install-the-certificates
