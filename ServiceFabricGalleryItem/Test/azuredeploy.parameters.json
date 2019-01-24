@@ -29,6 +29,9 @@
     "servicefabricReverseProxyEndpointPort": {
       "value": 19081
     },
+    "nsgPorts":{
+      "value": [5985]
+    },
     "sourceVaultValue": {
       "value": ""
     },

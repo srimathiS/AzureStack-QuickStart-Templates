@@ -92,9 +92,6 @@
         "diagStoreAccountTableUri": {
             "type": "string"
         },
-        "dnsLabel": {
-            "type": "string"
-        },
         "subnetID": {
             "type": "string"
         },
@@ -360,7 +357,7 @@
                             },
                             "frontendPortRangeStart": 50000,
                             "frontendPortRangeEnd": 50099,
-                            "backendPort": 3389,
+                            "backendPort": 5985,
                             "protocol": "Tcp"
                         }
                     }

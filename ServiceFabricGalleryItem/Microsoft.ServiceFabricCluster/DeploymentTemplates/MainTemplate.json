@@ -100,7 +100,7 @@
             "type": "array",
             "defaultValue": [ ],
             "metadata": {
-                "description": "Array of additional ports to be opened in the NSG (like [3389, 80, 8081])."
+                "description": "Array of additional ports to be opened in the NSG (like [5985, 80, 8081])."
             }
         },
         "sourceVaultValue": {
@@ -184,6 +184,13 @@
                 "description": "Scripts base url"
             },
             "defaultValue": "[deployment().properties.templateLink.uri]"
+        },
+        "applicationPackageURL":{
+            "type": "string",
+            "metadata": {
+                "description": "URL of the application package to deploy, in sfpkg format."
+            },
+            "defaultValue": "https://linsudevsa.blob.core.windows.net/sftestapp/VotingType.sfpkg"
         }
     },
     "variables": {
@@ -234,16 +241,13 @@
         "derivedIds": {
             "subnetID": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]"
         },
-
-        "sfDeploymentTemplateURL": "[uri(parameters('scriptBaseUrl'), 'deploySFCluster.json')]",
         "vmssDeploymentTemplateURL": "[uri(parameters('scriptBaseUrl'), 'vmssProvision.json')]",
-
-        "scriptName": "PrepareServiceFabricDeployment.ps1",
-        "serviceFabricPrepareScriptUrl": "[uri(parameters('scriptBaseUrl'), variables('scriptName'))]",        
-
         "isReverseProxyCert": "[if(equals(trim(parameters('reverseProxyCertificateUrlValue')), ''), bool('false'), bool('true'))]",
         "certurls": "[concat(array(parameters('clusterCertificateUrlValue')),array(parameters('serverCertificateUrlValue')),array(parameters('adminClientCertificateUrlValue')),array(parameters('nonAdminClientCertificateUrlValue')))]",
-        "certsToInstall": "[if(not(variables('isReverseProxyCert')), variables('certurls'), concat(variables('certurls'), array(parameters('reverseProxyCertificateUrlValue'))))]"
+        "certsToInstall": "[if(not(variables('isReverseProxyCert')), variables('certurls'), concat(variables('certurls'), array(parameters('reverseProxyCertificateUrlValue'))))]",
+        "vaultName": "[concat('tobedeleted', uniqueString(resourceGroup().id))]",
+        "applicationResourceName": "[concat(parameters('clusterName'), '/sfVotingApp')]",
+        "applicationTypeName": "VotingType"
 
     },
     "resources": [
@@ -628,6 +632,44 @@
                         "value": "[parameters('scriptBaseUrl')]"
                     }
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Fabric.Providers/serviceFabricClusterRegistrations",
+            "name": "[parameters('clusterName')]",
+            "apiVersion": "2016-05-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "SFDeployment"
+            ],
+            "properties": {
+                "runtimeVersion": "6.1",
+                "targetNumberOfNodes": "[parameters('primaryNtInstanceCount')]",
+                "virtualMachineScaleSetResourceId": "[resourceId('Microsoft.Compute/virtualMachineScaleSets', concat(variables('imageConfig').vmssUniqueName, '0'))]",
+                "administrationEndpointURL": "[concat('https://', reference(concat('Microsoft.Network/publicIPAddresses/', concat(concat(variables('imageConfig').vmssUniqueName, '0'), 'pip')), variables('apiVersion').publicIPApiVersion).dnsSettings.fqdn, ':', parameters('servicefabricTcpGatewayPort'))]",
+                "applicationEndpointURL": "[reference(resourceId('Microsoft.Resources/deployments', parameters('clusterName')), '2018-02-01').outputs.applicationEndpointURL.value]",
+                "clientCertificate": {
+                    "vaultName": "[variables('vaultName')]",
+                    "secretUrl": "[parameters('adminClientCertificateUrlValue')]"
+                },
+                "serverCertificate": {
+                    "vaultName": "[variables('vaultName')]",
+                    "secretUrl": "[parameters('serverCertificateUrlValue')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Fabric.Providers/serviceFabricClusterRegistrations/applications",
+            "name": "[variables('applicationResourceName')]",
+            "apiVersion": "2016-05-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Fabric.Providers/serviceFabricClusterRegistrations', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "version": "1.0.0",
+                "typeName": "[variables('applicationTypeName')]",
+                "packageDeploymentBlobURL": "[parameters('applicationPackageURL')]"
             }
         }
     ],
