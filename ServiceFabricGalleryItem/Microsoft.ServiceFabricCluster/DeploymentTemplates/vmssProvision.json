@@ -488,5 +488,9 @@
         }
     ],
         "outputs": {
+            "virtualMachineScaleSetResourceId": {
+                "type": "string",
+                "value": "[resourceId('Microsoft.Compute/virtualMachineScaleSets', concat(parameters('vmScaleSetName'), '0'))]"
+              }
         }
     }

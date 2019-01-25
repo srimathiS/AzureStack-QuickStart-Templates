@@ -645,9 +645,9 @@
             "properties": {
                 "runtimeVersion": "6.1",
                 "targetNumberOfNodes": "[parameters('primaryNtInstanceCount')]",
-                "virtualMachineScaleSetResourceId": "[resourceId('Microsoft.Compute/virtualMachineScaleSets', concat(variables('imageConfig').vmssUniqueName, '0'))]",
+                "virtualMachineScaleSetResourceId": "[reference(resourceId('Microsoft.Resources/deployments', 'VMSSProvisioning0'), '2018-02-01').outputs.virtualMachineScaleSetResourceId.value]",
                 "administrationEndpointURL": "[concat('https://', reference(concat('Microsoft.Network/publicIPAddresses/', concat(concat(variables('imageConfig').vmssUniqueName, '0'), 'pip')), variables('apiVersion').publicIPApiVersion).dnsSettings.fqdn, ':', parameters('servicefabricTcpGatewayPort'))]",
-                "applicationEndpointURL": "[reference(resourceId('Microsoft.Resources/deployments', parameters('clusterName')), '2018-02-01').outputs.applicationEndpointURL.value]",
+                "applicationEndpointURL": "[concat('https://', reference(concat('Microsoft.Network/publicIPAddresses/', concat(concat(variables('imageConfig').vmssUniqueName, '0'), 'pip')), variables('apiVersion').publicIPApiVersion).dnsSettings.fqdn, ':', parameters('servicefabricHttpGatewayPort'))]",
                 "clientCertificate": {
                     "vaultName": "[variables('vaultName')]",
                     "secretUrl": "[parameters('adminClientCertificateUrlValue')]"
