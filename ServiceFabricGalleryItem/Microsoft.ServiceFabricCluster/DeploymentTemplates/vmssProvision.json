@@ -92,6 +92,9 @@
         "diagStoreAccountTableUri": {
             "type": "string"
         },
+        "dnsLabel": {
+            "type": "string"
+        },
         "subnetID": {
             "type": "string"
         },
