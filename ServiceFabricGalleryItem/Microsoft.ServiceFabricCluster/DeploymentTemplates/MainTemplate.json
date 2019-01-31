@@ -190,7 +190,7 @@
             "metadata": {
                 "description": "URL of the application package to deploy, in sfpkg format."
             },
-            "defaultValue": "https://linsudevsa.blob.core.windows.net/sftestapp/VotingType.sfpkg"
+            "defaultValue": "https://linsudevsa.blob.core.windows.net/sftestapp/VotingV4.sfpkg"
         }
     },
     "variables": {
@@ -669,7 +669,18 @@
             "properties": {
                 "version": "1.0.0",
                 "typeName": "[variables('applicationTypeName')]",
-                "packageDeploymentBlobURL": "[parameters('applicationPackageURL')]"
+                "packageDeploymentBlobURL": "[parameters('applicationPackageURL')]",
+                "ConfigurationParameters": [ 
+                    {
+                        "parameterName": "VotingData_MinReplicaSetSize", "value": 3
+                    },
+                    {
+                        "parameterName": "VotingData_PartitionCount", "value": 1
+                    },
+                    {
+                        "parameterName": "VotingData_TargetReplicaSetSize", "value": 3
+                    }
+                ]
             }
         }
     ],

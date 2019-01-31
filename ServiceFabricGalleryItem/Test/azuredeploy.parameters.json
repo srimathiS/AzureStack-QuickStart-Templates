@@ -61,7 +61,7 @@
       "value": ""
     },
     "scriptBaseUrl": {
-      "value": "https://raw.githubusercontent.com/SrimathiS/AzureStack-QuickStart-Templates/managedos/ServiceFabricGalleryItem/Microsoft.ServiceFabricCluster/DeploymentTemplates/"
+      "value": "https://raw.githubusercontent.com/SrimathiS/AzureStack-QuickStart-Templates/mosstaging/ServiceFabricGalleryItem/Microsoft.ServiceFabricCluster/DeploymentTemplates/"
     }
   }
 }
