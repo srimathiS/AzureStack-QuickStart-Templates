@@ -667,7 +667,7 @@
                 "[resourceId('Microsoft.Fabric.Providers/serviceFabricClusterRegistrations', parameters('clusterName'))]"
             ],
             "properties": {
-                "version": "1.0.0",
+                "version": "1.0.4",
                 "typeName": "[variables('applicationTypeName')]",
                 "packageDeploymentBlobURL": "[parameters('applicationPackageURL')]",
                 "ConfigurationParameters": [ 
