@@ -203,7 +203,7 @@
         "networkParam" : "[concat(concat(' -SubnetIPFormat ', parameters('subnetIPFormat') ), concat(' -NodeTypeCount ', length(parameters('nodeTypeInstanceCounts')) ))]",
         "serviceFabricDeploymentModuleUrl": "[uri(parameters('scriptBaseUrl'), 'DeploySFCluster.zip')]",
         "serviceFabricDeploymentConfigFunction": "DeploySFCluster.ps1\\InstallServiceFabricConfiguration",
-        "serviceFabricConfigPath": "[uri(parameters('scriptBaseUrl'), 'ClusterConfig.X509.MultiMachine.json')]",
+        "serviceFabricConfigPath": "[uri(parameters('scriptBaseUrl'), 'ClusterConfig.X509.OneNode.json')]",
         "serviceFabricRuntimeUrl": "[if(equals(trim(parameters('serviceFabricRuntimeUrl')), ''), 'N/A', parameters('serviceFabricRuntimeUrl'))]",
         "certificateStoreValue": "My",
         "deploymentNodeIndex": 0,
