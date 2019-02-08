@@ -360,7 +360,7 @@
                             },
                             "frontendPortRangeStart": 50000,
                             "frontendPortRangeEnd": 50099,
-                            "backendPort": 3389,
+                            "backendPort": 5985,
                             "protocol": "Tcp"
                         }
                     }
@@ -488,5 +488,9 @@
         }
     ],
         "outputs": {
+            "virtualMachineScaleSetResourceId": {
+                "type": "string",
+                "value": "[resourceId('Microsoft.Compute/virtualMachineScaleSets', concat(parameters('vmScaleSetName'), '0'))]"
+              }
         }
     }
