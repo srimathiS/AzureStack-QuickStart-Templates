@@ -24,8 +24,11 @@ for($i = 0; $i -lt $NodeTypeCount; $i ++)
 {
     $IParray += $SubnetIPFormat.Replace("[]", $i)
 }
-Set-NetFirewallRule -Name 'WINRM-HTTP-In-TCP-PUBLIC' -RemoteAddress $IParray
-Write-Verbose "Subnet IPs enabled in WINRM-HTTP-In-TCP-PUBLIC: $IParray"
+#Set-NetFirewallRule -Name 'WINRM-HTTP-In-TCP-PUBLIC' -RemoteAddress $IParray
+#Write-Verbose "Subnet IPs enabled in WINRM-HTTP-In-TCP-PUBLIC: $IParray"
+#TODO - Temporary workaround to enable PSRemoting debugging for JIT
+Set-NetFirewallRule -Name 'WINRM-HTTP-In-TCP-PUBLIC' -RemoteAddress Any
+Write-Verbose "Enabled WINRM-HTTP-In-TCP-PUBLIC for Any RemoteAddress"
 
 # As per Service fabric documentation at: https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-windows-cluster-x509-security#install-the-certificates
 # set the access control on this certificate so that the Service Fabric process, which runs under the Network Service account, 
