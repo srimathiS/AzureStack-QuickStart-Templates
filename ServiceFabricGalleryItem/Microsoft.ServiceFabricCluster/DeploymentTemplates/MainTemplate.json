@@ -672,13 +672,13 @@
                 "packageDeploymentBlobURL": "[parameters('applicationPackageURL')]",
                 "ConfigurationParameters": [ 
                     {
-                        "parameterName": "VotingData_MinReplicaSetSize", "value": 1
+                        "parameterName": "VotingData_MinReplicaSetSize", "value": "[parameters('primaryNtInstanceCount')]"
                     },
                     {
                         "parameterName": "VotingData_PartitionCount", "value": 1
                     },
                     {
-                        "parameterName": "VotingData_TargetReplicaSetSize", "value": 1
+                        "parameterName": "VotingData_TargetReplicaSetSize", "value": "[parameters('primaryNtInstanceCount')]"
                     }
                 ]
             }
