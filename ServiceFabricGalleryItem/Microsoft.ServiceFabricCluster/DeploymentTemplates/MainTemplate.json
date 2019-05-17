@@ -230,7 +230,7 @@
             "vmssUniqueName": "[concat(parameters('nodeTypePrefix'), 'vmss')]",
             "vmImagePublisher": "MicrosoftAzureStack",
             "vmImageOffer": "AddOnRP",
-			"vmImageSku": "Core",
+			"vmImageSku": "Server",
             "vmImageVersion": "latest",
             "vhdContainerName": "[concat(variables('uniquePrefix'), 'vhd')]",
             "osDiskName": "[concat(variables('uniquePrefix'), 'osdisk')]",

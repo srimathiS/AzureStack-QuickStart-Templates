@@ -361,7 +361,7 @@
                             },
                             "frontendPortRangeStart": 50000,
                             "frontendPortRangeEnd": 50099,
-                            "backendPort": 5985,
+                            "backendPort": 3389,
                             "protocol": "Tcp"
                         }
                     }
