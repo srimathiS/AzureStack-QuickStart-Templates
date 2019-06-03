@@ -69,6 +69,10 @@
     [string] $certificateStoreValue,
 
     [Parameter(Mandatory = $false)]
+    [AllowEmptyString()]
+    [string] $RootCACertBase64,
+
+    [Parameter(Mandatory = $false)]
     [string] $DNSService = "No",
 
     [Parameter(Mandatory = $false)]
@@ -78,9 +82,23 @@
     [string] $ClientConnectionEndpoint
     )
 
-    Import-DscResource -ModuleName PSDesiredStateConfiguration, xServiceFabricSecureCluster
+    Import-DscResource -ModuleName PSDesiredStateConfiguration,xServiceFabricSecureCluster,xDisk
 
     Node localhost {
+
+        xWaitforDisk Disk2
+        {
+            DiskNumber = 2
+            RetryIntervalSec = 30
+            RetryCount = 10
+        }
+
+        xDisk DataDisk
+        {
+            DiskNumber = 2
+            DriveLetter = "E"
+            DependsOn = '[xWaitforDisk]Disk2'
+        }
 
         xServiceFabricSecureClusterDeployment DeployServiceFabricSecureConfiguration
         {
@@ -107,8 +125,10 @@
             CertificateStoreValue = $certificateStoreValue
             ClientConnectionEndpoint = $ClientConnectionEndpoint
             PsDscRunAsCredential = $Credential
+            RootCACertBase64 = $RootCACertBase64
             DNSService = $DNSService
             RepairManager = $RepairManager
+            DependsOn = '[xDisk]DataDisk'
         }
 
         LocalConfigurationManager 

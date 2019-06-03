@@ -6,7 +6,7 @@
       "value": "SFCluster"
     },
     "nodeTypePrefix": {
-      "value": "SFNode"
+      "value": "SFNODE"
     },
     "primaryNtInstanceCount": {
       "value": 1
@@ -29,7 +29,7 @@
     "servicefabricReverseProxyEndpointPort": {
       "value": 19081
     },
-    "nsgPorts":{"value": [5985, 3389]},
+    "nsgPorts":{"value": [3389]},
     "sourceVaultValue": {
       "value": ""
     },
@@ -61,7 +61,7 @@
       "value": ""
     },
     "scriptBaseUrl": {
-      "value": "https://raw.githubusercontent.com/SrimathiS/AzureStack-QuickStart-Templates/mosstaging/ServiceFabricGalleryItem/Microsoft.ServiceFabricCluster/DeploymentTemplates/"
+      "value": "https://raw.githubusercontent.com/SrimathiS/AzureStack-QuickStart-Templates/mostemp/ServiceFabricGalleryItem/Microsoft.ServiceFabricCluster/DeploymentTemplates/"
     }
   }
 }
